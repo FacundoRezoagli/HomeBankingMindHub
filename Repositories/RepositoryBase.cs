@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeBankingMindHub.Repositories
 {
-
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         protected HomeBankingContext RepositoryContext { get; set; }
