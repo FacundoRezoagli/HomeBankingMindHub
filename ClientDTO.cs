@@ -4,12 +4,8 @@ using System.Collections.Generic;
 
 using System.Text.Json.Serialization;
 
-
-
 namespace HomeBankingMindHub.dtos
-
 {
-
     public class ClientDTO
 
     {
@@ -27,5 +23,4 @@ namespace HomeBankingMindHub.dtos
         public ICollection<AccountDTO> Accounts { get; set; }
 
     }
-
 }
