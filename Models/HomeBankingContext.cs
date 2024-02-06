@@ -7,5 +7,6 @@ namespace HomeBankingMindHub.Models
         public HomeBankingContext(DbContextOptions<HomeBankingContext> options): base(options){ }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

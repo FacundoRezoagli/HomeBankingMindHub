@@ -1,5 +1,4 @@
-﻿using HomeBankingMindHub.dtos;
-
+﻿using HomeBankingMindHub.DTOs;
 using HomeBankingMindHub.Models;
 
 using HomeBankingMindHub.Repositories;

@@ -7,14 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 //Add DbContext to the container
-builder.Services.AddDbContext<HomeBankingContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("HbAppDbConnection")));
-builder.Services.AddControllers().AddJsonOptions(x =>
-x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-builder.Services.AddDbContext<HomeBankingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConexion")));
+builder.Services.AddDbContext<HomeBankingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HbAppDbConnection")));
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
-
 using (var scope = app.Services.CreateScope())
 {
     //Aqui obtenemos todos los services registrados en la App
@@ -31,15 +29,16 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Ha ocurrido un error al enviar la información a la base de datos!");
     }
 }
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.Run();
