@@ -78,5 +78,25 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost("createClient")]
+        public IActionResult create([FromBody] ClientCreateDTO clientDTO)
+        {
+            try
+            {
+                var client = new Client()
+                {
+                    Email = clientDTO.email,
+                    FirstName = clientDTO.firstName,
+                    LastName = clientDTO.lastName,
+                };
+                _clientRepository.Save(client);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
