@@ -1,7 +1,9 @@
 ﻿using HomeBankingMindHub.DTOs;
+using HomeBankingMindHub.Handlers;
 using HomeBankingMindHub.Models;
 using HomeBankingMindHub.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging.Signing;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -135,7 +137,7 @@ namespace HomeBankingMindHub.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Post([FromBody] Client client)
+        public IActionResult Post([FromBody] ClientRegisterDTO client)
         {
             try
             {
@@ -151,10 +153,17 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "Email está en uso");
                 }
 
+                var encryptionHandler = new EncryptionHandler();
+                byte[] cHash;
+                byte[] cSalt;
+                encryptionHandler.EncryptPassword(client.Password, out cHash, out cSalt);
+
                 Client newClient = new Client
                 {
+                    
                     Email = client.Email,
-                    Password = client.Password,
+                    Hash = cHash,
+                    Salt = cSalt,
                     FirstName = client.FirstName,
                     LastName = client.LastName,
                 };

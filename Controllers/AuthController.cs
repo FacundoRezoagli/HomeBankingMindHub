@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using HomeBankingMindHub.Models;
 using HomeBankingMindHub.DTOs;
+using HomeBankingMindHub.Handlers;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -19,12 +20,17 @@ namespace HomeBankingMindHub.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Client client)
+        public async Task<IActionResult> Login([FromBody] ClientRegisterDTO client)
         {
             try
             {
                 Client user = _clientRepository.FindByEmail(client.Email);
-                if (user == null || !String.Equals(user.Password, client.Password))
+                var encryptionHandler = new EncryptionHandler();
+                byte[] cHash;
+                byte[] cSalt;
+                encryptionHandler.EncryptPassword(client.Password, out cHash, out cSalt);
+
+                if (user == null || !encryptionHandler.ValidatePassword(client.Password,cHash,cSalt))
                     return Unauthorized();
 
                 var claims = new List<Claim>

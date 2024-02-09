@@ -1,4 +1,6 @@
-﻿namespace HomeBankingMindHub.Models
+﻿using HomeBankingMindHub.DTOs;
+using HomeBankingMindHub.Handlers;
+namespace HomeBankingMindHub.Models
 {
     public class DBInitializer
     {
@@ -6,9 +8,15 @@
         {
             if (!context.Clients.Any())  //CLIENTS
             {
+
+                var encryptionHandler = new EncryptionHandler();
+                byte[] cHash;
+                byte[] cSalt;
+                encryptionHandler.EncryptPassword("123456", out cHash, out cSalt);
+
                 var clients = new Client[]
                 {
-                    new Client { Email = "vcoronado@gmail.com", FirstName="Victor", LastName="Coronado", Password="123456"}
+                    new Client { Email = "vcoronado@gmail.com", FirstName="Victor", LastName="Coronado", Hash = cHash, Salt = cSalt}
                 };
                 context.Clients.AddRange(clients);
                 context.SaveChanges();
