@@ -24,6 +24,9 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password))
+                    return StatusCode(403, "datos inválidos");
+
                 Client user = _clientRepository.FindByEmail(client.Email);
                 var encryptionHandler = new EncryptionHandler();
                 byte[] cHash;
