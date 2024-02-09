@@ -5,9 +5,7 @@ namespace HomeBankingMindHub.Repositories
 {
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
-        public AccountRepository(HomeBankingContext repositoryContext) : base(repositoryContext)
-        {
-        }
+        public AccountRepository(HomeBankingContext repositoryContext) : base(repositoryContext){ }
 
         public Account FindById(long id)
         {
@@ -27,6 +25,13 @@ namespace HomeBankingMindHub.Repositories
         {
             Create(account);
             SaveChanges();
+        }
+
+        public IEnumerable<Account> GetAccountsByClient(long clientId)
+        {
+            return FindByCondition(account => account.ClientId == clientId)
+            .Include(account => account.Transactions)
+            .ToList();
         }
     }
 }

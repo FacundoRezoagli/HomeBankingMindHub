@@ -1,11 +1,10 @@
-﻿using HomeBankingMindHub.Models;
-
-namespace HomeBankingMindHub.Repositories
+﻿namespace HomeBankingMindHub.Repositories
 {
     public interface IAccountRepository
     {
+        IEnumerable<Account> GetAccountsByClient(long clientId);
         IEnumerable<Account> GetAllAccounts();
-        void Save(Account account);
         Account FindById(long id);
+        void Save(Account account);
     }
 }
