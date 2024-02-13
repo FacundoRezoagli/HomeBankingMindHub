@@ -1,6 +1,6 @@
 ﻿namespace HomeBankingMindHub.Models
 {
-    public class ClientLoans
+    public class ClientLoan
     {
         public long Id { get; set; }
         public double Amount { get; set; }
