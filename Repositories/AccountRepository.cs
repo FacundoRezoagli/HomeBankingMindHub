@@ -23,7 +23,15 @@ namespace HomeBankingMindHub.Repositories
 
         public void Save(Account account)
         {
-            Create(account);
+            if (account.Id == 0)
+            {
+                Create(account);
+            }
+            else
+            {
+                Update(account);
+            }
+
             SaveChanges();
         }
 
@@ -34,11 +42,11 @@ namespace HomeBankingMindHub.Repositories
             .ToList();
         }
 
-        public IEnumerable<Account> GetAccountByNumber(string accountNumber)
+        public Account GetAccountByNumber(string accountNumber)
         {
-            return FindByCondition(account => account.Number == accountNumber)
+            return FindByCondition(account => account.Number.ToUpper() == accountNumber.ToUpper())
             .Include(account => account.Transactions)
-            .ToList();
+            .FirstOrDefault();
         }
     }
 }

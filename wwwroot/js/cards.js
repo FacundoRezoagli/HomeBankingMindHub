@@ -15,13 +15,13 @@
                 .then(function (response) {
                     //get client ifo
                     app.clientInfo = response.data;
-                    app.creditCards = app.clientInfo.cards.filter(card => card.type == "CREDIT");
-                    app.debitCards = app.clientInfo.cards.filter(card => card.type == "DEBIT");
+                    app.creditCards = app.clientInfo.cards.$values.filter(card => card.type == "CREDIT");
+                    app.debitCards = app.clientInfo.cards.$values.filter(card => card.type == "DEBIT");
                 })
                 .catch(function (error) {
                     // handle error
                     this.errorMsg = "Error getting data";
-                    /*this.errorToats.show();*/
+                    this.errorToats.show();
                 })
         },
         formatDate: function (date) {
