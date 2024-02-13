@@ -172,9 +172,20 @@ namespace HomeBankingMindHub.Controllers
                     Salt = cSalt,
                     FirstName = client.FirstName,
                     LastName = client.LastName,
+                    Accounts = new List<Account>()
                 };
 
+                var ac = new Account
+                {
+                    CreationDate = DateTime.Now,
+                    Balance = 0,
+                    Number = Utils.Utils.GenerateAccountNumber(),
+                    ClientId = newClient.Id,
+                };
+
+                newClient.Accounts.Add(ac);
                 _clientRepository.Save(newClient);
+
                 return Created("", newClient);
 
             }
