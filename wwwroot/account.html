@@ -75,7 +75,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="transaction in accountInfo.transactions.$values"
+                                <tr v-for="transaction in accountInfo.transactions"
                                     v-bind:class="[ transaction.type == 'CREDIT' ? 'credit-transaction' : 'debit-transaction' ]">
                                     <td>{{ transaction.id }}</td>
                                     <td>{{ transaction.description }}</td>

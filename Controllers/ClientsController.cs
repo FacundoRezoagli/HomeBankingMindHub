@@ -286,6 +286,26 @@ namespace HomeBankingMindHub.Controllers
             }
         }
 
+        [HttpGet("current/accounts")]
+        public IActionResult GetAccounts()
+        {
+            try
+            {
+                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                if (email == string.Empty)
+                {
+                    return Forbid();
+                }
+                Client user = _clientRepository.FindByEmail(email);
+                var accounts = _accountRepository.GetAccountsByClient(user.Id);
+                return Ok(accounts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost("current/cards")]
         public IActionResult CreateCard([FromBody] CardCreateDTO card)
         {
