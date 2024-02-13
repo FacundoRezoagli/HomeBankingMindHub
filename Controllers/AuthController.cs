@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using HomeBankingMindHub.Models;
 using HomeBankingMindHub.DTOs;
-using HomeBankingMindHub.Handlers;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -28,12 +27,11 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "datos inválidos");
 
                 Client user = _clientRepository.FindByEmail(client.Email);
-                var encryptionHandler = new EncryptionHandler();
                 byte[] cHash;
                 byte[] cSalt;
-                encryptionHandler.EncryptPassword(client.Password, out cHash, out cSalt);
+                Utils.Utils.EncryptPassword(client.Password, out cHash, out cSalt);
 
-                if (user == null || !encryptionHandler.ValidatePassword(client.Password,cHash,cSalt))
+                if (user == null || !Utils.Utils.ValidatePassword(client.Password,user.Hash,user.Salt))
                     return Unauthorized();
 
                 var claims = new List<Claim>
@@ -49,9 +47,7 @@ namespace HomeBankingMindHub.Controllers
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
-
                 return Ok();
-
             }
             catch (Exception ex)
             {

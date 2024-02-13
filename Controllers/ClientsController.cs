@@ -1,9 +1,7 @@
 ﻿using HomeBankingMindHub.DTOs;
-using HomeBankingMindHub.Handlers;
 using HomeBankingMindHub.Models;
 using HomeBankingMindHub.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Packaging.Signing;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -11,8 +9,17 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
+
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository, ICardRepository cardRepository) 
+        { 
+            _clientRepository = clientRepository; 
+            _accountRepository = accountRepository; 
+            _cardRepository = cardRepository; 
+        }
         private IClientRepository _clientRepository;
-        public ClientsController(IClientRepository clientRepository){ _clientRepository = clientRepository; }
+        private IAccountRepository _accountRepository;
+        private ICardRepository _cardRepository;
+        
 
         [HttpGet]
         public IActionResult Get()
@@ -153,10 +160,9 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "Email está en uso");
                 }
 
-                var encryptionHandler = new EncryptionHandler();
                 byte[] cHash;
                 byte[] cSalt;
-                encryptionHandler.EncryptPassword(client.Password, out cHash, out cSalt);
+                Utils.Utils.EncryptPassword(client.Password, out cHash, out cSalt);
 
                 Client newClient = new Client
                 {
@@ -231,6 +237,86 @@ namespace HomeBankingMindHub.Controllers
                 };
 
                 return Ok(clientDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("current/accounts")]
+        public IActionResult CreateAccount()
+        {
+            try
+            {
+                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                if (email == string.Empty)
+                {
+                    return Forbid();
+                }
+                Client user = _clientRepository.FindByEmail(email);
+                if(_accountRepository.GetAccountsByClient(user.Id).Count() == 3) 
+                {
+                    return StatusCode(403);
+                }
+                var ac = new Account()
+                {
+                    CreationDate = DateTime.Now,
+                    Balance = 0,
+                    Number = Utils.Utils.GenerateAccountNumber(),
+                    ClientId = user.Id,
+                };
+                _accountRepository.Save(ac);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("current/cards")]
+        public IActionResult CreateCard([FromBody] CardCreateDTO card)
+        {
+            try
+            {
+                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                if (email == string.Empty)
+                {
+                    return Forbid();
+                }
+                Client user = _clientRepository.FindByEmail(email);
+                int creditCardCount = _cardRepository.GetCardsByClientAndType(user.Id, "credit").Count();
+                int debitCardCount = _cardRepository.GetCardsByClientAndType(user.Id, "debit").Count();
+
+                if(card.Type != "CREDIT" && card.Type != "DEBIT")
+                {
+                    return StatusCode(400);
+                }
+
+                if (card.Type == "CREDIT" && creditCardCount == 3)
+                {
+                    return StatusCode(403);
+                }
+
+                if (card.Type == "DEBIT" && debitCardCount == 3)
+                {
+                    return StatusCode(403);
+                }
+
+                var c = new Card()
+                {
+                    Type =  card.Type,
+                    Color = card.Color,
+                    CardHolder = user.FirstName + " " + user.LastName,
+                    Cvv = Utils.Utils.GenerateCardCVV(),
+                    FromDate = DateTime.Now,
+                    ThruDate = DateTime.Now.AddYears(5),
+                    Number = Utils.Utils.GenerateCardNumber(),
+                    ClientId = user.Id,
+                };
+                _cardRepository.Save(c);
+                return Ok();
             }
             catch (Exception ex)
             {

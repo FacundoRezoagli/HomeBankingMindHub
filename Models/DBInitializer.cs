@@ -1,5 +1,4 @@
 ﻿using HomeBankingMindHub.DTOs;
-using HomeBankingMindHub.Handlers;
 namespace HomeBankingMindHub.Models
 {
     public class DBInitializer
@@ -9,10 +8,9 @@ namespace HomeBankingMindHub.Models
             if (!context.Clients.Any())  //CLIENTS
             {
 
-                var encryptionHandler = new EncryptionHandler();
                 byte[] cHash;
                 byte[] cSalt;
-                encryptionHandler.EncryptPassword("123456", out cHash, out cSalt);
+                Utils.Utils.EncryptPassword("123456", out cHash, out cSalt);
 
                 var clients = new Client[]
                 {

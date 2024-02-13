@@ -60,6 +60,7 @@
                     <div class="row mt-3">
                         <div class="col">
                             <h2 class="display-6">Accounts</h2>
+                            <button v-if="clientInfo.accounts != null && clientInfo.accounts.length < 3" v-on:click="create" id="create" class="btn btn-sm btn-outline-success">Create</button>
                         </div>
                     </div>
                     <div class="row">

@@ -41,7 +41,7 @@
                                         <h3 class="mb-4">Sign In</h3>
                                     </div>
                                 </div>
-                                <form action="#" class="signin-form" v-on:submit="signIn()">
+                                <form action="#" class="signin-form" v-on:submit="signIn">
                                     <div class="form-group mb-3">
                                         <label class="label" for="email">Email</label>
                                         <input v-model="email" id="email" type="email" class="form-control" placeholder="email@mail.com" required>
@@ -61,7 +61,7 @@
                                         <h3 class="mb-4">Sign Up</h3>
                                     </div>
                                 </div>
-                                <form action="#" class="signout-form" v-on:submit="signUp()">
+                                <form action="#" class="signout-form" v-on:submit="signUp">
                                     <div class="form-group mb-3">
                                         <label class="label" for="firstName">First name</label>
                                         <input v-model="firstName" id="firstName" type="text" class="form-control" placeholder="Juan" required>
