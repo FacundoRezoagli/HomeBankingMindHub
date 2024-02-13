@@ -33,5 +33,12 @@ namespace HomeBankingMindHub.Repositories
             .Include(account => account.Transactions)
             .ToList();
         }
+
+        public IEnumerable<Account> GetAccountByNumber(string accountNumber)
+        {
+            return FindByCondition(account => account.Number == accountNumber)
+            .Include(account => account.Transactions)
+            .ToList();
+        }
     }
 }
