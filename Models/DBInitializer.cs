@@ -101,7 +101,7 @@ namespace HomeBankingMindHub.Models
                     var loan1 = context.Loans.FirstOrDefault(l => l.Name == "Hipotecario");
                     if (loan1 != null)
                     {
-                        var clientLoan1 = new ClientLoans
+                        var clientLoan1 = new ClientLoan
                         {
                             Amount = 400000,
                             ClientId = client1.Id,
@@ -114,7 +114,7 @@ namespace HomeBankingMindHub.Models
                     var loan2 = context.Loans.FirstOrDefault(l => l.Name == "Personal");
                     if (loan2 != null)
                     {
-                        var clientLoan2 = new ClientLoans
+                        var clientLoan2 = new ClientLoan
                         {
                             Amount = 50000,
                             ClientId = client1.Id,
@@ -127,7 +127,7 @@ namespace HomeBankingMindHub.Models
                     var loan3 = context.Loans.FirstOrDefault(l => l.Name == "Automotriz");
                     if (loan3 != null)
                     {
-                        var clientLoan3 = new ClientLoans
+                        var clientLoan3 = new ClientLoan
                         {
                             Amount = 100000,
                             ClientId = client1.Id,

@@ -11,7 +11,7 @@
     methods: {
         getData: function () {
             //axios.get("/api/clients/1")
-            axios.get("/api/clients/current")
+            axios.get("/api/Clients/current")
                 .then(function (response) {
                     //get client ifo
                     app.clientInfo = response.data;
@@ -21,7 +21,7 @@
                 .catch(function (error) {
                     // handle error
                     this.errorMsg = "Error getting data";
-                    this.errorToats.show();
+                    //this.errorToats.show();
                 })
         },
         formatDate: function (date) {
@@ -32,7 +32,7 @@
             .then(response => window.location.href="/index.html")
             .catch(() =>{
                 this.errorMsg = "Sign out failed"   
-                this.errorToats.show();
+                //this.errorToats.show();
             })
         },
     },

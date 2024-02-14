@@ -67,8 +67,7 @@ var app = new Vue({
                 this.okmodal.show();
             })
             .catch((error) =>{
-                this.errorMsg = error.response.data;
-                console.log(error.response.data)
+                this.errorMsg = error.response.data;  
                 this.errorToats.show();
             })
         },

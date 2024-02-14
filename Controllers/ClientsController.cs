@@ -9,7 +9,8 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-
+        //CONSTRUCTOR
+        #region
         public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository, ICardRepository cardRepository) 
         { 
             _clientRepository = clientRepository; 
@@ -19,7 +20,7 @@ namespace HomeBankingMindHub.Controllers
         private IClientRepository _clientRepository;
         private IAccountRepository _accountRepository;
         private ICardRepository _cardRepository;
-        
+        #endregion
 
         [HttpGet]
         public IActionResult Get()
@@ -194,7 +195,6 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
         [HttpGet("current")]
         public IActionResult GetCurrent()
         {
