@@ -35,12 +35,6 @@ namespace HomeBankingMindHub.Repositories
             .ToList();
         }
 
-        public IEnumerable<Card> GetCardsByClientAndType(long clientId, string type)
-        {
-            return FindByCondition(card => card.ClientId == clientId && card.Type == type)
-                .ToList();
-        }
-
         public bool IsCreated(long clientId, string type, string color)
         {
             IEnumerable<Card> cards = new List<Card>();
