@@ -317,20 +317,13 @@ namespace HomeBankingMindHub.Controllers
                     return Forbid();
                 }
                 Client user = _clientRepository.FindByEmail(email);
-                int creditCardCount = _cardRepository.GetCardsByClientAndType(user.Id, "credit").Count();
-                int debitCardCount = _cardRepository.GetCardsByClientAndType(user.Id, "debit").Count();
 
-                if(card.Type != "CREDIT" && card.Type != "DEBIT")
+                if (card.Type != "CREDIT" && card.Type != "DEBIT")
                 {
                     return StatusCode(400);
                 }
 
-                if (card.Type == "CREDIT" && creditCardCount == 3)
-                {
-                    return StatusCode(403);
-                }
-
-                if (card.Type == "DEBIT" && debitCardCount == 3)
+                if(_cardRepository.IsCreated(user.Id, card.Type, card.Color))
                 {
                     return StatusCode(403);
                 }

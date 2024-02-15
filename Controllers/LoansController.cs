@@ -78,7 +78,6 @@ namespace HomeBankingMindHub.Controllers
                 LoanId = loan.Id
             };
             user.ClientLoans.Add(cl);
-            //_clientRepository.Save(user);
             _clientLoanRepository.Save(cl);
 
             return Ok();

@@ -1,5 +1,9 @@
 ﻿using HomeBankingMindHub.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace HomeBankingMindHub.Repositories
 {
@@ -35,6 +39,15 @@ namespace HomeBankingMindHub.Repositories
         {
             return FindByCondition(card => card.ClientId == clientId && card.Type == type)
                 .ToList();
+        }
+
+        public bool IsCreated(long clientId, string type, string color)
+        {
+            IEnumerable<Card> cards = new List<Card>();
+            cards = FindByCondition(card => card.ClientId == clientId && card.Type == type && card.Color == color)
+                .ToList();
+            bool ret = cards.Count() != 0 ? true : false;
+            return ret;
         }
     }
 }
