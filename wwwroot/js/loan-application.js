@@ -30,19 +30,19 @@ var app = new Vue({
         },
         checkApplication: function(){
             if(this.loanTypeId == 0){
-                this.errorMsg = "You must select a loan type";
+                this.errorMsg = "Debe seleccionar un tipo de prestamo";
                 this.errorToats.show();
             }
             else if(this.payments == 0){
-                this.errorMsg = "You must select payments";
+                this.errorMsg = "Debe seleccionar la cantidad de pagos";
                 this.errorToats.show();
             }
             else if(this.accountToNumber == "VIN"){
-                this.errorMsg = "You must indicate an account";
+                this.errorMsg = "Debe especificar una cuenta de destino";
                 this.errorToats.show();
             }
             else if(this.amount == 0){
-                this.errorMsg = "You must indicate an amount";  
+                this.errorMsg = "Debe indicar un monto";  
                 this.errorToats.show();
             }else{
                 this.modal.show();
@@ -55,7 +55,8 @@ var app = new Vue({
                 this.okmodal.show();
             })
             .catch((error) =>{
-                this.errorMsg = error.response.data;  
+                this.errorMsg = error.response.data;
+                this.modal.hide();
                 this.errorToats.show();
             })
         },
@@ -77,10 +78,10 @@ var app = new Vue({
         signOut: function(){
             axios.post('/api/auth/logout')
             .then(response => window.location.href="/index.html")
-            .catch(() =>{
-                this.errorMsg = "Sign out failed"   
-                this.errorToats.show();
-            })
+            .catch((error) =>{
+    this.errorMsg = error.response.data;  
+    this.errorToats.show();
+})
         },
     },
     mounted: function(){

@@ -13,15 +13,15 @@ var app = new Vue({
         signOut: function(){
             axios.post('/api/auth/logout')
             .then(response => window.location.href="/index.html")
-            .catch(() =>{
-                this.errorMsg = "Sign out failed"   
+            .catch((error) => {
+                this.errorMsg = error.response.data;
                 this.errorToats.show();
             })
         },
         create: function(event){
             event.preventDefault();
             if(this.cardType == "none" || this.cardColor == "none"){
-                this.errorMsg = "You must select a card type and color";  
+                this.errorMsg = "Debe seleccionar tipo de tarjeta y color";  
                 this.errorToats.show();
             }else{
 /*                 let config = {
@@ -40,8 +40,8 @@ var app = new Vue({
                     color: this.cardColor,
                 })
                     .then(() => { window.location.href = "/cards.html" })
-                    .catch(() => {
-                        this.errorMsg = "Sign up failed, check the information"
+                    .catch((error) => {
+                        this.errorMsg = error.response.data;
                         this.errorToats.show();
                     })
             }

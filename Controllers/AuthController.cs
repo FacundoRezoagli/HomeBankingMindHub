@@ -32,7 +32,7 @@ namespace HomeBankingMindHub.Controllers
                 Utils.Utils.EncryptPassword(client.Password, out cHash, out cSalt);
 
                 if (user == null || !Utils.Utils.ValidatePassword(client.Password,user.Hash,user.Salt))
-                    return Unauthorized();
+                    return StatusCode(401, "Nombre de usuario o contrasenia invalidos");
 
                 var claims = new List<Claim>
                 {

@@ -14,10 +14,8 @@ var app = new Vue({
                 //get client ifo
                 app.clientInfo = response.data;
             })
-            .catch(function (error) {
-                // handle error
-                //app.error = error;
-                this.errorMsg = "Error getting data";
+            .catch((error) => {
+                this.errorMsg = error.response.data;
                 this.errorToats.show();
             })
         },
@@ -27,8 +25,8 @@ var app = new Vue({
         signOut: function () {
             axios.post('/api/auth/logout')
                 .then(response => window.location.href = "/index.html")
-                .catch(() => {
-                    this.errorMsg = "Sign out failed"
+                .catch((error) => {
+                    this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
         },

@@ -325,7 +325,7 @@ namespace HomeBankingMindHub.Controllers
 
                 if(_cardRepository.IsCreated(user.Id, card.Type, card.Color))
                 {
-                    return StatusCode(403);
+                    return StatusCode(403, "Ya posee una tarjeta de tipo " + card.Type.ToString() + " " + card.Color.ToString());
                 }
 
                 var c = new Card()

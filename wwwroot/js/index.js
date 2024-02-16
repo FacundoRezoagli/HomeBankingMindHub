@@ -31,8 +31,8 @@
                 password: this.password
                 })
                 .then(response => window.location.href = "/accounts.html")
-                .catch(() => {
-                    this.errorMsg = "Sign in failed, check the information"
+                .catch((error) => {
+                    this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
         },
@@ -59,8 +59,8 @@
                 email: this.email
             })
                 .then(() => { this.signIn(event) })
-                .catch(() => {
-                    this.errorMsg = "Sign up failed, check the information"
+                .catch((error) => {
+                    this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
         },

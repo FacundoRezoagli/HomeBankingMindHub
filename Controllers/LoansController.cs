@@ -49,8 +49,18 @@ namespace HomeBankingMindHub.Controllers
             Loan loan = _loanRepository.FindById(loanApplication.LoanId);
 
             if (loan == null) return Forbid();
-            if(loanApplication.Amount < 0 || loanApplication.Amount > loan.MaxAmount) return StatusCode(400);
-            if(loanApplication.Payments == null) return StatusCode(400);
+
+            if (loanApplication.Amount < 0)
+            {
+                return StatusCode(400, "Monto invalido");
+            }
+
+            if(loanApplication.Amount > loan.MaxAmount)
+            {
+                return StatusCode(400, "El prestamo de tipo " + loan.Name.ToString().ToLower() + " tiene un monto maximo de " + loan.MaxAmount.ToString());
+            }
+
+            if (loanApplication.Payments == null) return StatusCode(400);
 
             Account account = _accountRepository.GetAccountByNumber(loanApplication.ToAccountNumber);
 
@@ -79,6 +89,20 @@ namespace HomeBankingMindHub.Controllers
             };
             user.ClientLoans.Add(cl);
             _clientLoanRepository.Save(cl);
+
+            account.Balance += loanApplication.Amount;
+            _accountRepository.Save(account);
+
+            var tr = new Transaction()
+            {
+                Amount = loanApplication.Amount,
+                Type = TransactionType.CREDIT.ToString(),
+                Description = "Loan taken on " + DateTime.Now.ToString(),
+                Date = DateTime.Now,
+                AccountId = account.Id,
+            };
+
+            _transactionRepository.Save(tr);
 
             return Ok();
         }

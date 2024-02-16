@@ -29,18 +29,18 @@ var app = new Vue({
         },
         checkTransfer: function(){
             if(this.accountFromNumber == "VIN"){
-                this.errorMsg = "You must select an origin account";  
+                this.errorMsg = "Debe seleccionar cuenta de origen";  
                 this.errorToats.show();
             }
             else if(this.accountToNumber == "VIN"){
-                this.errorMsg = "You must select a destination account";  
+                this.errorMsg = "Debe seleccionar cuenta de destino";  
                 this.errorToats.show();
             }else if(this.amount == 0){
-                this.errorMsg = "You must indicate an amount";  
+                this.errorMsg = "Debe indicar un monto";  
                 this.errorToats.show();
             }
             else if(this.description.length <= 0){
-                this.errorMsg = "You must indicate a description";  
+                this.errorMsg = "Debe proporcionar una descripcion";  
                 this.errorToats.show();
             }else{
                 this.modal.show();
@@ -69,6 +69,7 @@ var app = new Vue({
             .catch((error) =>{
                 this.errorMsg = error.response.data;  
                 this.errorToats.show();
+                this.modal.hide();
             })
         },
         changedType: function(){
@@ -87,8 +88,8 @@ var app = new Vue({
         signOut: function(){
             axios.post('/api/auth/logout')
             .then(response => window.location.href="/index.html")
-            .catch(() =>{
-                this.errorMsg = "Sign out failed"   
+            .catch((error) => {
+                this.errorMsg = error.response.data;
                 this.errorToats.show();
             })
         },

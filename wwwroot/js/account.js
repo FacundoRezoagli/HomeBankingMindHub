@@ -16,12 +16,10 @@ var app = new Vue({
                 app.accountInfo = response.data;
                 app.accountInfo.transactions.sort((a,b) => parseInt(b.id - a.id))
             })
-            .catch(function (error) {
-                // handle error
-                //app.error = error;
-                this.errorMsg = "Error getting data";
-                this.errorToats.show();
-            })
+                .catch((error) => {
+                    this.errorMsg = error.response.data;
+                    this.errorToats.show();
+                })
         },
         formatDate: function(date){
             return new Date(date).toLocaleDateString('en-gb');
@@ -29,8 +27,8 @@ var app = new Vue({
         signOut: function () {
             axios.post('/api/auth/logout')
                 .then(response => window.location.href = "/index.html")
-                .catch(() => {
-                    this.errorMsg = "Sign out failed"
+                .catch((error) => {
+                    this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
         },

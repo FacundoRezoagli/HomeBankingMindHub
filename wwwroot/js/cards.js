@@ -30,9 +30,9 @@
         signOut: function(){
             axios.post('/api/auth/logout')
             .then(response => window.location.href="/index.html")
-            .catch(() =>{
-                this.errorMsg = "Sign out failed"   
-                //this.errorToats.show();
+            .catch((error) => {
+                this.errorMsg = error.response.data;
+                this.errorToats.show();
             })
         },
     },
