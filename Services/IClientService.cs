@@ -8,6 +8,6 @@ namespace HomeBankingMindHub.Services
         List<ClientDTO> getAllClients();
         ClientDTO getClientById(long id);
         public Client FindByEmail(string email);
-        void Save(Client client);
+        void Save(ClientRegisterDTO client);
     }
 }

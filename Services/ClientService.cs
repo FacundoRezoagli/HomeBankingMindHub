@@ -7,10 +7,12 @@ namespace HomeBankingMindHub.Services
     public class ClientService : IClientService
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public ClientService(IClientRepository clientRepository)
+        public ClientService(IClientRepository clientRepository, IAccountRepository accountRepository)
         {
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
         }
 
         public Client FindByEmail(string email)
@@ -41,9 +43,14 @@ namespace HomeBankingMindHub.Services
             return clientDTO;
         }
 
-        public void Save(Client client)
+        public void Save(ClientRegisterDTO client)
         {
-            _clientRepository.Save(client);
+            Client newClient = new Client(client);
+            _clientRepository.Save(newClient);
+            //AHORA QUE EL CLIENTE TIENE ID LO TRAEMOS PARA AGREGARLE UNA CUENTA
+            Client c = FindByEmail(client.Email);
+            Account a = new Account(c);
+            _accountRepository.Save(a);
         }
     }
 }

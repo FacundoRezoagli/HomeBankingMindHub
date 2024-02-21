@@ -72,14 +72,8 @@ namespace HomeBankingMindHub.Controllers
                 if (user != null)
                     return StatusCode(403, "Email está en uso");
 
-                Client newClient = new Client(client);
-                _clientService.Save(newClient);
-
-                //AHORA QUE EL CLIENTE TIENE ID LO TRAEMOS PARA AGREGARLE UNA CUENTA
-                Client c = _clientService.FindByEmail(client.Email);
-                Account a = new Account(c);
-                _accountRepository.Save(a);
-                return Created("", newClient);
+                _clientService.Save(client);
+                return Created("", client);
             }
             catch (Exception ex)
             {
