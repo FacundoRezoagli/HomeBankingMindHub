@@ -12,10 +12,11 @@ namespace HomeBankingMindHub.Models
                 byte[] cSalt;
                 Utils.Utils.EncryptPassword("123456", out cHash, out cSalt);
 
-                var clients = new Client[]
+                var clients = new Client[] 
                 {
-                    new Client { Email = "vcoronado@gmail.com", FirstName="Victor", LastName="Coronado", Hash = cHash, Salt = cSalt}
+                    new Client("vcoronado@gmail.com", "Victor", "Coronado", cHash, cSalt)
                 };
+                
                 context.Clients.AddRange(clients);
                 context.SaveChanges();
             }
@@ -26,7 +27,7 @@ namespace HomeBankingMindHub.Models
                 {
                     var accounts = new Account[]
                     {
-                        new Account {ClientId = accountVictor.Id, CreationDate = DateTime.Now, Number = "VIN001", Balance = 0 }
+                        new Account(accountVictor.Id, DateTime.Now,"VIN001",0)
                     };
                     foreach (Account account in accounts)
                     {
@@ -149,26 +150,27 @@ namespace HomeBankingMindHub.Models
                     //le agregamos 2 tarjetas de crédito una GOLD y una TITANIUM, de tipo DEBITO Y CREDITO RESPECTIVAMENTE
                     var cards = new Card[]
                     {
-                        new Card {
-                            ClientId= client1.Id,
-                            CardHolder = client1.FirstName + " " + client1.LastName,
-                            Type = CardType.DEBIT.ToString(),
-                            Color = CardColor.GOLD.ToString(),
-                            Number = "3325-6745-7876-4445",
-                            Cvv = 990,
-                            FromDate= DateTime.Now,
-                            ThruDate= DateTime.Now.AddYears(4),
-                        },
-                        new Card {
-                            ClientId= client1.Id,
-                            CardHolder = client1.FirstName + " " + client1.LastName,
-                            Type = CardType.CREDIT.ToString(),
-                            Color = CardColor.TITANIUM.ToString(),
-                            Number = "2234-6745-552-7888",
-                            Cvv = 750,
-                            FromDate= DateTime.Now,
-                            ThruDate= DateTime.Now.AddYears(5),
-                        },
+                        new Card
+                        (
+                            client1.Id,
+                            client1.FirstName + " " + client1.LastName,
+                            CardType.DEBIT.ToString(),
+                            CardColor.GOLD.ToString(),
+                            "3325-6745-7876-4445",
+                            990,
+                            DateTime.Now,
+                            DateTime.Now.AddYears(4)),
+                        new Card
+                        (
+                            client1.Id,
+                            client1.FirstName + " " + client1.LastName,
+                            CardType.CREDIT.ToString(),
+                            CardColor.TITANIUM.ToString(),
+                            "2234-6745-552-7888",
+                            750,
+                            DateTime.Now,
+                            DateTime.Now.AddYears(5)
+                        )
                     };
 
                     foreach (Card card in cards)

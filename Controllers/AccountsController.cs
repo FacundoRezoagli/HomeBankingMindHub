@@ -23,21 +23,7 @@ namespace HomeBankingMindHub.Controllers
                 var accountsDTO = new List<AccountDTO>();
                 foreach (Account account in accounts)
                 {
-                    var newAccountDTO = new AccountDTO
-                    {
-                        Id = account.Id,
-                        Number = account.Number,
-                        CreationDate = account.CreationDate,
-                        Balance = account.Balance,
-                        Transactions = account.Transactions.Select(tr => new TransactionDTO
-                        {
-                            Id = tr.Id,
-                            Type = tr.Type,
-                            Amount = tr.Amount,
-                            Description = tr.Description,
-                            Date = tr.Date
-                        }).ToList()
-                    };
+                    var newAccountDTO = new AccountDTO(account);
                     accountsDTO.Add(newAccountDTO);
                 }
                 return Ok(accountsDTO);
@@ -58,21 +44,7 @@ namespace HomeBankingMindHub.Controllers
                 {
                     return Forbid();
                 }
-                var accountDTO = new AccountDTO
-                {
-                    Id = account.Id,
-                    Number = account.Number,
-                    CreationDate = account.CreationDate,
-                    Balance = account.Balance,
-                    Transactions = account.Transactions.Select(tr => new TransactionDTO
-                    {
-                        Id = tr.Id,
-                        Type = tr.Type,
-                        Amount = tr.Amount,
-                        Description = tr.Description,
-                        Date = tr.Date
-                    }).ToList()
-                };
+                var accountDTO = new AccountDTO(account);
                 return Ok(accountDTO);
             }
             catch (Exception ex)

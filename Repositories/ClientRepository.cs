@@ -41,7 +41,15 @@ namespace HomeBankingMindHub.Repositories
 
         public void Save(Client client)
         {
-            Create(client);
+            var a = FindByEmail(client.Email);
+            if (a == null) 
+            {
+                Create(client);
+            }
+            else
+            {
+                Update(client);
+            }
             SaveChanges();
         }
     }
