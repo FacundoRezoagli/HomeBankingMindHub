@@ -1,6 +1,6 @@
 ﻿using HomeBankingMindHub.DTOs;
-using HomeBankingMindHub.Models;
 using HomeBankingMindHub.Repositories;
+using HomeBankingMindHub.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBankingMindHub.Controllers
@@ -9,24 +9,17 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private IAccountRepository _accountRepository;
-        public AccountsController(IAccountRepository accountRepository)
+        private readonly IAccountService _accountService;
+        public AccountsController(IAccountService accountService)
         {
-            _accountRepository = accountRepository;
+            _accountService = accountService;
         }
         [HttpGet]
         public IActionResult Get()
         {
             try
-            {
-                var accounts = _accountRepository.GetAllAccounts();
-                var accountsDTO = new List<AccountDTO>();
-                foreach (Account account in accounts)
-                {
-                    var newAccountDTO = new AccountDTO(account);
-                    accountsDTO.Add(newAccountDTO);
-                }
-                return Ok(accountsDTO);
+            {   
+                return Ok(_accountService.GetAllAccounts());
             }
             catch (Exception ex)
             {
@@ -39,13 +32,15 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                var account = _accountRepository.FindById(id);
+                AccountDTO account = _accountService.FindById(id);
                 if (account == null)
                 {
                     return Forbid();
                 }
-                var accountDTO = new AccountDTO(account);
-                return Ok(accountDTO);
+                else
+                {
+                    return Ok(account);
+                }
             }
             catch (Exception ex)
             {
