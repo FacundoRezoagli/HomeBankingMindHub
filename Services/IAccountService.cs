@@ -6,5 +6,6 @@ namespace HomeBankingMindHub.Services
     {
         AccountDTO FindById(long id);
         IEnumerable<AccountDTO> GetAllAccounts();
+        Account GetAccountByNumber(string accountNumber);
     }
 }

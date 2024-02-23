@@ -10,19 +10,13 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-
-        
         //CONSTRUCTOR
         #region
-        public ClientsController(IClientService clientService, IAccountRepository accountRepository, ICardRepository cardRepository) 
+        public ClientsController(IClientService clientService) 
         {
             _clientService = clientService;
-            _accountRepository = accountRepository; 
-            _cardRepository = cardRepository; 
         }
         private readonly IClientService _clientService;
-        private IAccountRepository _accountRepository;
-        private ICardRepository _cardRepository;
         #endregion
 
         [HttpGet]
@@ -49,9 +43,8 @@ namespace HomeBankingMindHub.Controllers
             {
                 ClientDTO clientDTO = _clientService.getClientById(id);
                 if (clientDTO == null)
-                {
                     return NotFound();
-                }
+
                 return Ok(clientDTO);
             }
             catch (Exception ex)
@@ -67,12 +60,12 @@ namespace HomeBankingMindHub.Controllers
             {
                 //VALIDACIONES
                 if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password) || String.IsNullOrEmpty(client.FirstName) || String.IsNullOrEmpty(client.LastName))
-                    return StatusCode(403, "datos inválidos");
+                    return StatusCode(403, "No pueden haber campos vacios");
                 Client user = _clientService.FindByEmail(client.Email);
                 if (user != null)
                     return StatusCode(403, "Email está en uso");
 
-                _clientService.Save(client);
+                _clientService.createClient(client);
                 return Created("", client);
             }
             catch (Exception ex)
@@ -93,9 +86,7 @@ namespace HomeBankingMindHub.Controllers
                 Client client = _clientService.FindByEmail(email);
                 if (client == null)
                     return Forbid();
-
-                ClientDTO clientDTO = new ClientDTO(client);
-                return Ok(clientDTO);
+                return Ok(new ClientDTO(client));
             }
             catch (Exception ex)
             {
@@ -108,17 +99,19 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                //VALIDACIONES
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                     return Forbid();
-                Client user = _clientService.FindByEmail(email);
-                if(_accountRepository.GetAccountsByClient(user.Id).Count() == 3) 
-                    return StatusCode(403);
-
-                Account ac = new Account(user);
-                _accountRepository.Save(ac);
-                return Ok();
+               
+               string result = _clientService.createAccount(email);
+                if (result == "ok")
+                {
+                    return StatusCode(201, "Cuenta creada con exito");
+                }
+                else
+                {
+                    return StatusCode(403, result);
+                }
             }
             catch (Exception ex)
             {
@@ -136,9 +129,7 @@ namespace HomeBankingMindHub.Controllers
                 {
                     return Forbid();
                 }
-                Client user = _clientService.FindByEmail(email);
-                IEnumerable<Account> accounts = _accountRepository.GetAccountsByClient(user.Id);
-                return Ok(accounts);
+                return Ok(_clientService.GetClientAccounts(email));
             }
             catch (Exception ex)
             {
@@ -154,21 +145,15 @@ namespace HomeBankingMindHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                     return Forbid();
-                Client user = _clientService.FindByEmail(email);
-
-                if (card.Type != "CREDIT" && card.Type != "DEBIT")
+                string result = _clientService.createCard(email, card);
+                if (result == "ok")
                 {
-                    return StatusCode(400);
+                    return StatusCode(201, "Tarjeta creada con exito");
                 }
-
-                if(_cardRepository.IsCreated(user.Id, card.Type, card.Color))
+                else
                 {
-                    return StatusCode(403, "Ya posee una tarjeta de tipo " + card.Type.ToString() + " " + card.Color.ToString());
+                    return StatusCode(403, result);
                 }
-
-                var c = new Card(card, user);
-                _cardRepository.Save(c);
-                return Ok();
             }
             catch (Exception ex)
             {

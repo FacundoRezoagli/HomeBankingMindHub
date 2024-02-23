@@ -21,6 +21,11 @@ namespace HomeBankingMindHub.Services
             return new AccountDTO(account);
         }
 
+        public Account GetAccountByNumber(string accountNumber)
+        {
+            throw new NotImplementedException();
+        }
+
         IEnumerable<AccountDTO> IAccountService.GetAllAccounts()
         {
             var accounts = _accountRepository.GetAllAccounts();
