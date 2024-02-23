@@ -15,6 +15,7 @@ namespace HomeBankingMindHub.DTOs
             LoanId = clientLoan.LoanId;
             Amount = clientLoan.Amount;
             Payments = int.Parse(clientLoan.Payments);
+            Name = clientLoan.Loan.Name;
         }
     }
 }
